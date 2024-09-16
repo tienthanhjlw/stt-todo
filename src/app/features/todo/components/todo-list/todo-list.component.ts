@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, map, startWith } from 'rxjs/operators';
 import { TodoItemComponent } from '../todo-item/todo-item.component';
 import { TodoService } from '../../services/todo.service';
 import { Todo } from '../../models/todo.model';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
 import { TodoBulkActionComponent } from "../todo-bulk-action/todo-bulk-action.component";
 
 @Component({
@@ -13,6 +14,7 @@ import { TodoBulkActionComponent } from "../todo-bulk-action/todo-bulk-action.co
   standalone: true,
   imports: [
 		CommonModule,
+		ReactiveFormsModule,
 		TodoItemComponent,
 		TodoBulkActionComponent
 	],
@@ -43,16 +45,31 @@ import { TodoBulkActionComponent } from "../todo-bulk-action/todo-bulk-action.co
 })
 export class TodoListComponent implements OnInit {
   todos$!: Observable<Todo[]>;
+	searchControl = new FormControl('');
 
   constructor(private todoService: TodoService) {}
 
   ngOnInit() {
-    this.todos$ = this.todoService.getTodos().pipe(
-      map(todos => todos.sort((a, b) => {
-        const dateA = new Date(a.dueDate);
-        const dateB = new Date(b.dueDate);
-        return dateA.getTime() - dateB.getTime();
-      }))
-    );
+		const search$ = this.searchControl.valueChanges.pipe(
+			startWith(''),
+			debounceTime(300),
+			distinctUntilChanged()
+		);
+		
+		this.todos$ = combineLatest([
+			this.todoService.getTodos(),
+			search$
+		]).pipe(
+			map(([todos, searchTerm]) => 
+				todos
+					.filter(todo => todo.title.toLowerCase().includes(searchTerm?.toLowerCase()?? ''))  // Filter by search term
+					.sort((prevTodo, nextTodo) => {
+						const dateA = new Date(prevTodo.dueDate);
+						const dateB = new Date(nextTodo.dueDate);
+						return dateA.getTime() - dateB.getTime();
+					})
+			)
+		);
+		
   }
 }
