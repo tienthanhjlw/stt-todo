@@ -1,0 +1,9 @@
+<div class="todo-bulk-action">
+	<span>
+		Bulk Action
+	</span>
+	<div class="buttons">
+		<button class="detail-btn" [disabled]="selectedTodoIds.length === 0">Done</button>
+		<button (click)="onClickRemove()" class="remove-btn" [disabled]="selectedTodoIds.length === 0">Remove</button>
+	</div>
+</div>

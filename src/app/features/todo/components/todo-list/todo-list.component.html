@@ -1,0 +1,9 @@
+<div class="todo-list-container">
+	<h2>Todo List</h2>
+	<div class="todo-list">
+		@for (todo of (todos$ | async); track todo.id) {
+			<app-todo-item [@fade] [todo]="todo"></app-todo-item>
+		}
+	</div>
+</div>
+<app-todo-bulk-action></app-todo-bulk-action>

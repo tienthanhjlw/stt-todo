@@ -1,0 +1,38 @@
+:host {
+	display: block;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+.todo-bulk-action {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+}
+
+.buttons {
+	display: flex;
+	gap: 10px;
+}
+
+.detail-btn, .remove-btn {
+	padding: 5px 10px;
+	border: none;
+	color: white;
+	border-radius: 5px;
+	cursor: pointer;
+
+	&:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.detail-btn {
+	background-color: #00c4cc;
+}
+
+.remove-btn {
+	background-color: #e74c3c;
+}

@@ -1,0 +1,31 @@
+<div class="new-task-form">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+		<app-form-field>
+			<input type="text" formControlName="title" [placeholder]=" value() ? 'Edit task...' : 'Add new task...'" class="width-100">
+		</app-form-field>
+    
+		<app-form-field label="Description" id="description">
+			<textarea formControlName="description" rows="4" class="width-100"></textarea>
+		</app-form-field>
+    
+    <div class="form-row">
+			<div class="width-50">
+				<app-form-field label="Due Date" id="dueDate">
+					<input type="date" formControlName="dueDate" id="dueDate" class="width-100">
+				</app-form-field>
+			</div>
+      
+			<div class="width-50">
+				<app-form-field label="Priority" id="priority">
+					<select formControlName="piority" id="priority" class="width-100 priority-select">
+						@for (option of priorityOptions; track option.value) {
+							<option [value]="option.value">{{ option.label }}</option>
+						}
+					</select>
+				</app-form-field>
+			</div>
+    </div>
+
+    <button [disabled]="formGroup.invalid" type="submit" class="submit-button">{{ submitLabel() }}</button>
+  </form>
+</div>

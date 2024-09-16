@@ -1,0 +1,13 @@
+<div class="form-field">
+	@if (label) {
+		<label>{{ label }}</label>
+	}
+	<div class="control-wrapper">
+		<ng-content></ng-content>
+		@if (control?.invalid && (control?.touched || control?.dirty)) {
+			<div class="error-message">
+				{{ getErrorMessage() }}
+			</div>
+		}
+	</div>
+</div>

@@ -1,0 +1,17 @@
+<div class="todo-item">
+	<label>
+		<input type="checkbox" (change)="onToggle()" />
+		<span>{{ todo().title }}</span>
+	</label>
+	<div class="buttons">
+		<button class="detail-btn" (click)="onViewDetail()">Detail</button>
+		<button class="remove-btn" (click)="onDelete()">Remove</button>
+	</div>
+</div>
+
+
+@if (showDetail()) {
+	<div class="todo-detail" [@detail]>
+		<app-todo-form (formValueSubmit)="onUdate($event)" [value]="todo()" submitLabel="Update"></app-todo-form>
+	</div>
+}
