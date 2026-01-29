@@ -50,15 +50,16 @@ export abstract class Component {
   // A simple event binding implementation
   private bindEvents() {
     if (!this.element) return;
-    const elementsWithEvents = this.element.querySelectorAll('[data-event]');
-    elementsWithEvents.forEach(el => {
-      const eventAttr = el.getAttribute('data-event');
-      if (eventAttr) {
-        const [eventName, methodName] = eventAttr.split(':');
-        if (eventName && methodName && typeof (this as any)[methodName] === 'function') {
-          el.addEventListener(eventName, (this as any)[methodName].bind(this));
+    this.element.querySelectorAll('*').forEach(el => {
+      Array.from(el.attributes).forEach(attr => {
+        if (attr.name.startsWith('(') && attr.name.endsWith(')')) {
+          const eventName = attr.name.slice(1, -1);
+          const methodName = attr.value.replace(/\(\)$/, ''); // remove ()
+          if (eventName && methodName && typeof (this as any)[methodName] === 'function') {
+            el.addEventListener(eventName, (this as any)[methodName].bind(this));
+          }
         }
-      }
+      });
     });
   }
 

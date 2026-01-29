@@ -4,8 +4,8 @@ class App extends Component {
         super(`
       <div>
         <h1>Counter App</h1>
-        <p>Count: <span data-bind="count"></span></p>
-        <button data-event="click:increment">Increment</button>
+        <p>Count: {{ count }}</p>
+        <button (click)="increment()">Increment</button>
       </div>
     `);
         this.setState({ count: 0 });
